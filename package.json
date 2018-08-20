@@ -1,0 +1,25 @@
+{
+  "name": "golloco",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nigelsmk/golloco.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nigelsmk/golloco/issues"
+  },
+  "homepage": "https://github.com/nigelsmk/golloco#readme",
+  "dependencies": {
+    "cron": "^1.4.0",
+    "dotenv": "^6.0.0",
+    "googleapis": "^27.0.0",
+    "telebot": "^1.2.6"
+  }
+}
