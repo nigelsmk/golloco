@@ -2,7 +2,7 @@ const TeleBot = require('telebot');
 const fs = require('fs');
 const readline = require('readline');
 const { google } = require('googleapis');
-var CronJob = require('cron').CronJob;
+var schedule = require('node-schedule');
 require('dotenv').config()
 
 const bot = new TeleBot(process.env.TELEGRAM_BOT_TOKEN);
@@ -11,19 +11,23 @@ let row = 0;
 let linkText;
 
 bot.on('/hello', (msg) => {
-    return bot.sendMessage(msg.chat.id, `Hello ${msg.from.first_name}, I'm Mali and I love to share travel content once a day. Please don't talk to me, Imma recluse!`, { replyToMessage: msg.message_id });
+    if (msg.chat.id == -1001290400104) { //-1001321929443
+        return bot.sendMessage(msg.chat.id, `Hello ${msg.from.first_name}, I'm Mali and I love to share travel content once a day. Please don't talk to me, Imma recluse!`, { replyToMessage: msg.message_id });
+    }
 });
 
 bot.on('/helloMali', (msg) => {
-    message = msg;
+    if (msg.chat.id == -1001290400104) { //-1001321929443
+        message = msg;
 
-    fs.readFile('credentials.json', (err, content) => {
-        if (err) return console.log('Error loading client secret file:', err);
-        // Authorize a client with credentials, then call the Google Sheets API.
-        authorize(JSON.parse(content), printTravelArticles);
-    });
+        fs.readFile('credentials.json', (err, content) => {
+            if (err) return console.log('Error loading client secret file:', err);
+            // Authorize a client with credentials, then call the Google Sheets API.
+            authorize(JSON.parse(content), printTravelArticles);
+        });
 
-    return bot.sendMessage(msg.chat.id, `Hello everyone, I'm Mali and I love to share travel content once a day. Please don't talk to me, Imma recluse!`);
+        return bot.sendMessage(msg.chat.id, `Hello everyone, I'm Mali and I love to share travel content once a day. Please don't talk to me, Imma recluse!`);
+    }
 });
 
 bot.start();
@@ -41,7 +45,6 @@ function authorize(credentials, callback) {
     const { client_secret, client_id, redirect_uris } = credentials.installed;
     const oAuth2Client = new google.auth.OAuth2(
         client_id, client_secret, redirect_uris[0]);
-
     try {
         // Check if we have previously stored a token.
         fs.readFile(TOKEN_PATH, (err, token) => {
@@ -86,7 +89,7 @@ function getNewToken(oAuth2Client, callback) {
 }
 
 function printTravelArticles(auth) {
-    new CronJob('*/5 * * * * *', function () {
+    schedule.scheduleJob('*/5 * * * * *', function () {
         const sheets = google.sheets({ version: 'v4', auth });
         sheets.spreadsheets.values.get({
             spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
@@ -96,7 +99,7 @@ function printTravelArticles(auth) {
             const data = res.data.values;
 
             if (data.length) {
-
+                //console.log("in print links")    
                 if (typeof data[row] !== 'undefined') {
                     linkText = data[row][0] + " " + data[row][1];
                     bot.sendMessage(message.chat.id, linkText);
@@ -108,5 +111,5 @@ function printTravelArticles(auth) {
             }
         });
 
-    }, null, true, 'Asia/Singapore');
+    });
 }
