@@ -11,9 +11,9 @@ let row = 0;
 let linkText;
 
 bot.on('/hello', (msg) => {
-    //if (msg.chat.id == -1001290400104) { //-1001321929443
-        return bot.sendMessage(msg.chat.id, `Hello ${msg.from.first_name}, I'm Mali and I love to share travel content once a day. Please don't talk to me, Imma recluse!`, { replyToMessage: msg.message_id });
-    //}
+    if (msg.chat.id == -1001290400104) { //-1001321929443
+        return bot.sendMessage(msg.chat.id, `Hello ${msg.from.first_name}, I'm Mali and I love to share about the latest travel news and hacks! Please don't talk to me, Imma recluse!`, { replyToMessage: msg.message_id });
+    }
 });
 
 bot.on('/helloMali', (msg) => {
@@ -26,7 +26,7 @@ bot.on('/helloMali', (msg) => {
             authorize(JSON.parse(content), printTravelArticles);
         });
 
-        return bot.sendMessage(msg.chat.id, `Hello everyone, I'm Mali and I love to share travel content once a day. Please don't talk to me, Imma recluse!`);
+        return bot.sendMessage(msg.chat.id, `Hello everyone, I'm Mali and I love to share about the latest travel news and hacks! Please don't talk to me, Imma recluse!`);
     }
 });
 
@@ -89,7 +89,7 @@ function getNewToken(oAuth2Client, callback) {
 }
 
 function printTravelArticles(auth) {
-    //schedule.scheduleJob('*/5 * * * * *', function () {
+    schedule.scheduleJob('*/5 * * * * *', function () {
         const sheets = google.sheets({ version: 'v4', auth });
         sheets.spreadsheets.values.get({
             spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
@@ -111,5 +111,5 @@ function printTravelArticles(auth) {
             }
         });
 
-    //});
+    });
 }
