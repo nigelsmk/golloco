@@ -12,12 +12,12 @@ let linkText;
 
 bot.on('/hello', (msg) => {
     if (msg.chat.id == -1001290400104) { //-1001321929443
-        return bot.sendMessage(msg.chat.id, `Hello ${msg.from.first_name}, I'm Mali and I love to share about the latest travel news and hacks! Please don't talk to me, Imma recluse!`, { replyToMessage: msg.message_id });
+        return bot.sendMessage(msg.chat.id, `Hello ${msg.from.first_name}, I'm Mali and I love to share travel tips and hacks! Please don't talk to me, Imma recluse!`, { replyToMessage: msg.message_id });
     }
 });
 
 bot.on('/helloMali', (msg) => {
-    if (msg.chat.id == -1001290400104) { //-1001321929443
+    if (msg.chat.id == -1001321929443) { //-1001321929443
         message = msg;
 
         fs.readFile('credentials.json', (err, content) => {
@@ -26,7 +26,7 @@ bot.on('/helloMali', (msg) => {
             authorize(JSON.parse(content), printTravelArticles);
         });
 
-        return bot.sendMessage(msg.chat.id, `Hello everyone, I'm Mali and I love to share about the latest travel news and hacks! Please don't talk to me, Imma recluse!`);
+        return bot.sendMessage(msg.chat.id, `Hello everyone, I'm Mali and I love to share travel tips and hacks! Please don't talk to me, Imma recluse!`);
     }
 });
 
