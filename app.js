@@ -17,7 +17,8 @@ bot.on('/hello', (msg) => {
 });
 
 bot.on('/helloMali', (msg) => {
-    if (msg.chat.id == -1001321929443) { //-1001321929443
+    console.log(msg.chat.id);
+    if (msg.chat.id == -1001290400104) { //-1001321929443
         message = msg;
 
         fs.readFile('credentials.json', (err, content) => {
