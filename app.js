@@ -90,7 +90,7 @@ function getNewToken(oAuth2Client, callback) {
 }
 
 function printTravelArticles(auth) { //*/5 * * * * *
-    schedule.scheduleJob('0 19 22 */2 * *', function () {
+    schedule.scheduleJob('0 12 * * *', function () {
         const sheets = google.sheets({ version: 'v4', auth });
         sheets.spreadsheets.values.get({
             spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
