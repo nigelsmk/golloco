@@ -56,7 +56,7 @@ function authorize(credentials, callback) {
     } catch (err) {
         console.log(err);
     }
-} 
+}
 
 /**
  * Get and store new token after prompting for user authorization, and then
@@ -90,7 +90,16 @@ function getNewToken(oAuth2Client, callback) {
 }
 
 function printTravelArticles(auth) { // 00 29 19 * * 1-7    */5 * * * * *'
-    schedule.scheduleJob('17 0 * * *', function () {
+    var rule = new schedule.RecurrenceRule();
+    // your timezone
+    rule.tz = 'Asia/Singapore';
+
+    // runs at 15:00:00
+    rule.second = 0;
+    rule.minute = 31;
+    rule.hour = 0;
+
+    schedule.scheduleJob(rule, function () {
         const sheets = google.sheets({ version: 'v4', auth });
         sheets.spreadsheets.values.get({
             spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
