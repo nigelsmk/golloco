@@ -2,7 +2,7 @@ const TeleBot = require('telebot');
 const fs = require('fs');
 const readline = require('readline');
 const { google } = require('googleapis');
-var schedule = require('node-schedule');
+var schedule = require('node-schedule-tz');
 require('dotenv').config()
 
 const bot = new TeleBot(process.env.TELEGRAM_BOT_TOKEN);
@@ -91,13 +91,11 @@ function getNewToken(oAuth2Client, callback) {
 
 function printTravelArticles(auth) { // 00 29 19 * * 1-7    */5 * * * * *'
     var rule = new schedule.RecurrenceRule();
-    // your timezone
-    rule.tz = 'Asia/Singapore';
 
-    // runs at 15:00:00
+    rule.hour = 0;
+    rule.minute = 54;
     rule.second = 0;
-    rule.minute = 40;
-    rule.hour = 16;
+    rule.tz = 'Asia/Singapore';
 
     schedule.scheduleJob(rule, function () {
         const sheets = google.sheets({ version: 'v4', auth });
