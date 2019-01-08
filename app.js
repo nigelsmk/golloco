@@ -96,8 +96,8 @@ function printTravelArticles(auth) { // 00 29 19 * * 1-7    */5 * * * * *'
 
     // runs at 15:00:00
     rule.second = 0;
-    rule.minute = 31;
-    rule.hour = 0;
+    rule.minute = 40;
+    rule.hour = 16;
 
     schedule.scheduleJob(rule, function () {
         const sheets = google.sheets({ version: 'v4', auth });
