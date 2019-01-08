@@ -97,7 +97,7 @@ function printTravelArticles(auth) { // 00 29 19 * * 1-7    */5 * * * * *'
     // rule.second = 0;
     // rule.tz = 'Asia/Singapore';
 
-    schedule.scheduleJob('57 0 * * *', 'Asia/Singapore', function () {
+    schedule.scheduleJob('8 1 * * *', 'Asia/Singapore', function () {
         const sheets = google.sheets({ version: 'v4', auth });
         sheets.spreadsheets.values.get({
             spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
