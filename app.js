@@ -90,14 +90,14 @@ function getNewToken(oAuth2Client, callback) {
 }
 
 function printTravelArticles(auth) { // 00 29 19 * * 1-7    */5 * * * * *'
-    // var rule = new schedule.RecurrenceRule();
+    var rule = new schedule.RecurrenceRule();
 
-    // rule.hour = 0;
-    // rule.minute = 54;
-    // rule.second = 0;
-    // rule.tz = 'Asia/Singapore';
+    rule.hour = 0;
+    rule.minute = 12;
+    rule.second = 1;
+    rule.tz = 'Asia/Singapore';
 
-    schedule.scheduleJob('9 1 * * *', 'Asia/Singapore', function () {
+    schedule.scheduleJob(rule, function () {
         const sheets = google.sheets({ version: 'v4', auth });
         sheets.spreadsheets.values.get({
             spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
