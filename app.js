@@ -2,7 +2,8 @@ const TeleBot = require('telebot');
 const fs = require('fs');
 const readline = require('readline');
 const { google } = require('googleapis');
-var schedule = require('node-schedule-tz');
+// var schedule = require('node-schedule-tz');
+var CronJob = require('cron').CronJob;
 require('dotenv').config()
 
 const bot = new TeleBot(process.env.TELEGRAM_BOT_TOKEN);
@@ -90,34 +91,64 @@ function getNewToken(oAuth2Client, callback) {
 }
 
 function printTravelArticles(auth) { // 00 29 19 * * 1-7    */5 * * * * *'
-    var rule = new schedule.RecurrenceRule();
+    // var rule = new schedule.RecurrenceRule();
 
-    rule.hour = 0;
-    rule.minute = 12;
-    rule.second = 1;
-    rule.tz = 'Asia/Singapore';
+    // rule.hour = 0;
+    // rule.minute = 54;
+    // rule.second = 0;
+    // rule.tz = 'Asia/Singapore';
 
-    schedule.scheduleJob(rule, function () {
-        const sheets = google.sheets({ version: 'v4', auth });
-        sheets.spreadsheets.values.get({
-            spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
-            range: 'Travel Links Data!A2:B',
-        }, (err, res) => {
-            if (err) return console.log('The API returned an error: ' + err);
-            const data = res.data.values;
+    // schedule.scheduleJob('19 1 * * *', 'Asia/Singapore', function () {
+    //     const sheets = google.sheets({ version: 'v4', auth });
+    //     sheets.spreadsheets.values.get({
+    //         spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
+    //         range: 'Travel Links Data!A2:B',
+    //     }, (err, res) => {
+    //         if (err) return console.log('The API returned an error: ' + err);
+    //         const data = res.data.values;
 
-            if (data.length) {
-                //console.log("in print links")    
-                if (typeof data[row] !== 'undefined') {
-                    linkText = data[row][0] + " " + data[row][1];
-                    bot.sendMessage(message.chat.id, linkText);
-                    row++;
+    //         if (data.length) {
+    //             //console.log("in print links")    
+    //             if (typeof data[row] !== 'undefined') {
+    //                 linkText = data[row][0] + " " + data[row][1];
+    //                 bot.sendMessage(message.chat.id, linkText);
+    //                 row++;
+    //             }
+
+    //         } else {
+    //             console.log('No data found.');
+    //         }
+    //     });
+
+    // });
+
+    const job = new CronJob({
+        // Run at 05:00 Central time, only on weekdays
+        cronTime: '00 54 11 * * 0-6',
+        onTick: function () {
+            console.log('inside cron.');
+            const sheets = google.sheets({ version: 'v4', auth });
+            sheets.spreadsheets.values.get({
+                spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
+                range: 'Travel Links Data!A2:B',
+            }, (err, res) => {
+                if (err) return console.log('The API returned an error: ' + err);
+                const data = res.data.values;
+
+                if (data.length) {
+                    //console.log("in print links")    
+                    if (typeof data[row] !== 'undefined') {
+                        linkText = data[row][0] + " " + data[row][1];
+                        bot.sendMessage(message.chat.id, linkText);
+                        row++;
+                    }
+
+                } else {
+                    console.log('No data found.');
                 }
-
-            } else {
-                console.log('No data found.');
-            }
-        });
-
+            });
+        },
+        start: true,
+        timeZone: 'Asia/Singapore'
     });
 }
