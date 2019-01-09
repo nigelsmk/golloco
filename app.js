@@ -56,7 +56,7 @@ function authorize(credentials, callback) {
     } catch (err) {
         console.log(err);
     }
-}
+} 
 
 /**
  * Get and store new token after prompting for user authorization, and then
@@ -89,8 +89,8 @@ function getNewToken(oAuth2Client, callback) {
     });
 }
 
-function printTravelArticles(auth) {
-    schedule.scheduleJob('*/5 * * * * *', function () {
+function printTravelArticles(auth) { //*/5 * * * * *
+    schedule.scheduleJob('0 19 22 */2 * *', function () {
         const sheets = google.sheets({ version: 'v4', auth });
         sheets.spreadsheets.values.get({
             spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
