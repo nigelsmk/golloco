@@ -12,14 +12,14 @@ let row = 0;
 let linkText;
 
 bot.on('/hello', (msg) => {
-    if (msg.chat.id == -1001290400104) { //-1001321929443
-        return bot.sendMessage(msg.chat.id, `Hello ${msg.from.first_name}, I'm Mali and I love to share travel tips and hacks! Please don't talk to me, Imma recluse!`, { replyToMessage: msg.message_id });
+    if (msg.chat.id == -1001290400104 && msg.from.id == 114655573) { //-1001321929443
+        return bot.sendMessage(msg.chat.id, `Hello ${msg.from.first_name}, I'm Mali and I love to share travel tips and hacks!`, { replyToMessage: msg.message_id });
     }
 });
 
 bot.on('/helloMali', (msg) => {
-    console.log(msg.chat.id);
-    if (msg.chat.id == -1001290400104) { //-1001321929443
+    console.log(msg.from.id);
+    if (msg.chat.id == -1001290400104 && msg.from.id == 114655573) { //-1001321929443 //own user id: 114655573
         message = msg;
 
         fs.readFile('credentials.json', (err, content) => {
@@ -28,7 +28,7 @@ bot.on('/helloMali', (msg) => {
             authorize(JSON.parse(content), printTravelArticles);
         });
 
-        return bot.sendMessage(msg.chat.id, `Hello everyone, I'm Mali and I love to share travel tips and hacks! Please don't talk to me, Imma recluse!`);
+        return bot.sendMessage(msg.chat.id, `Hello everyone, I'm Mali and I love to share travel tips and hacks!`);
     }
 });
 
@@ -124,7 +124,7 @@ function printTravelArticles(auth) { // 00 29 19 * * 1-7    */5 * * * * *'
 
     const job = new CronJob({
         // Run at 05:00 Central time, only on weekdays
-        cronTime: '00 11 16 * * 0-6',
+        cronTime: '00 40 16 * * 0-6',
         onTick: function () {
             console.log('inside cron.');
             const sheets = google.sheets({ version: 'v4', auth });
