@@ -124,7 +124,7 @@ function printTravelArticles(auth) { // 00 29 19 * * 1-7    */5 * * * * *'
 
     const job = new CronJob({
         // Run at 05:00 Central time, only on weekdays
-        cronTime: '00 40 16 * * 0-6',
+        cronTime: '00 42 16 * * 0-6',
         onTick: function () {
             console.log('inside cron.');
             const sheets = google.sheets({ version: 'v4', auth });
