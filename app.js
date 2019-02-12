@@ -25,7 +25,18 @@ bot.on('/helloMali', (msg) => {
         fs.readFile('credentials.json', (err, content) => {
             if (err) return console.log('Error loading client secret file:', err);
             // Authorize a client with credentials, then call the Google Sheets API.
-            authorize(JSON.parse(content), printTravelArticles);
+
+            const job = new CronJob({
+                // 20 23 * * 0-6
+                cronTime: '43 23 * * 0-6',
+                onTick: function () {
+                    authorize(JSON.parse(content), printTravelArticles);
+                },
+                start: true,
+                timeZone: 'Asia/Singapore'
+            });
+
+
         });
 
         return bot.sendMessage(msg.chat.id, `Hello everyone, I'm Mali and I love to share travel tips and hacks!`);
@@ -90,65 +101,27 @@ function getNewToken(oAuth2Client, callback) {
     });
 }
 
-function printTravelArticles(auth) { // 00 29 19 * * 1-7    */5 * * * * *'
-    // var rule = new schedule.RecurrenceRule();
+function printTravelArticles(auth) {
+    console.log('inside cron. before row: ' + row);
+    const sheets = google.sheets({ version: 'v4', auth });
+    sheets.spreadsheets.values.get({
+        spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
+        range: 'Travel Links Data!A2:B',
+    }, (err, res) => {
+        if (err) return console.log('The API returned an error: ' + err);
+        const data = res.data.values;
 
-    // rule.hour = 0;
-    // rule.minute = 54;
-    // rule.second = 0;
-    // rule.tz = 'Asia/Singapore';
+        if (data.length) {
+            if (typeof data[row] !== 'undefined') {
+                console.log("before row: " + row);
+                linkText = data[row][0] + " " + data[row][1];
+                bot.sendMessage(message.chat.id, linkText);
+                row++;
+                console.log("after row: " + row);
+            }
 
-    // schedule.scheduleJob('19 1 * * *', 'Asia/Singapore', function () {
-    //     const sheets = google.sheets({ version: 'v4', auth });
-    //     sheets.spreadsheets.values.get({
-    //         spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
-    //         range: 'Travel Links Data!A2:B',
-    //     }, (err, res) => {
-    //         if (err) return console.log('The API returned an error: ' + err);
-    //         const data = res.data.values;
-
-    //         if (data.length) {
-    //             //console.log("in print links")    
-    //             if (typeof data[row] !== 'undefined') {
-    //                 linkText = data[row][0] + " " + data[row][1];
-    //                 bot.sendMessage(message.chat.id, linkText);
-    //                 row++;
-    //             }
-
-    //         } else {
-    //             console.log('No data found.');
-    //         }
-    //     });
-
-    // });
-
-    const job = new CronJob({
-        // Run at 05:00 Central time, only on weekdays
-        cronTime: '00 55 13 * * 0-6',
-        onTick: function () {
-            console.log('inside cron.');
-            const sheets = google.sheets({ version: 'v4', auth });
-            sheets.spreadsheets.values.get({
-                spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
-                range: 'Travel Links Data!A2:B',
-            }, (err, res) => {
-                if (err) return console.log('The API returned an error: ' + err);
-                const data = res.data.values;
-
-                if (data.length) {
-                    //console.log("in print links")    
-                    if (typeof data[row] !== 'undefined') {
-                        linkText = data[row][0] + " " + data[row][1];
-                        bot.sendMessage(message.chat.id, linkText);
-                        row++;
-                    }
-
-                } else {
-                    console.log('No data found.');
-                }
-            });
-        },
-        start: true,
-        timeZone: 'Asia/Singapore'
+        } else {
+            console.log('No data found.');
+        }
     });
 }
