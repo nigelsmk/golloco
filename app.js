@@ -28,7 +28,7 @@ bot.on('/helloMali', (msg) => {
 
             const job = new CronJob({
                 // 20 23 * * 0-6
-                cronTime: '12 17 * * 3',
+                cronTime: '28 17 * * 3',
                 onTick: function () {
                     authorize(JSON.parse(content), printTravelArticles);
                 },
